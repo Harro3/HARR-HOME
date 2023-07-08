@@ -1,8 +1,8 @@
 import discord
 from discord import app_commands
 
-import hardware.sense_hat as sh
-import response.response as rsp
+import hardware as sh
+import response as rsp
 
 
 intents = discord.Intents.default()
