@@ -15,15 +15,18 @@ def get_config(reload_json = False):
             config = json.load(f)
     return config
 
-def set_config(parameter, value = None):
+def set_config(parameter, value):
     global config
-    if (value == None):
-        if (parameter in config):
-            config.pop(parameter)
-        else:
+    try:
+        # Check that the value is the same type as the default value
+        current_value = config[parameter]
+        value = json.loads(value)
+        if (current_value == None or type(current_value) != type(value)):
             return False
-    else:
         config[parameter] = value
-    with open(CONFIG_PATH, 'w') as f:
-        json.dump(config, f, indent=4)
-    return True
+        with open(CONFIG_PATH, 'w') as f:
+            json.dump(config, f, indent=4)
+
+        return True
+    except:
+        return False

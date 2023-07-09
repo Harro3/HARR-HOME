@@ -17,6 +17,13 @@ class Hardware():
     
     def get_pressure(self):
         return 0
+    
+    def get_ip(self):
+        return "No IP for hardware"
+    
+    def visual_alert(self):
+        print("Visual alert !!!!!!!")
+        pass
 
 
 hardware = Hardware()

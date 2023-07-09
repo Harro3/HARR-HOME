@@ -37,15 +37,13 @@ async def get_config(ctx):
     await res.send_embed(embed)
 
 
-@tree.command(name = "update_config", description = "Set or remove (no value) a config parameter")
-async def update_config(ctx, parameter:str, value:str = None):
+@tree.command(name = "update_config", description = "Set a config parameter (has to be valid json)")
+async def update_config(ctx, parameter:str, value:str):
     res = await generate_response(ctx)
     if not is_owner(ctx):
         res.message("You are not the owner of this bot!").status(status.ERROR)
     elif not cfg.set_config(parameter, value):
-        res.message(f"Parameter {parameter} not found!").status(status.ERROR)
-    elif (value == None):
-        res.message(f"Removed {parameter}")
+        res.message(f"Parameter does not exist or value is not valid").status(status.ERROR)
     else:
         res.message(f"Set {parameter} to {value}")
     await res.send()
@@ -64,6 +62,18 @@ async def get_humidity(ctx):
 async def get_pressure(ctx):
     res = await generate_response(ctx)
     await res.title("Current pressure").message(f"{get_hardware().get_pressure()} millibar").send()
+
+
+@tree.command(name = "get_ip", description = "Get the current IP of the hardware")
+async def get_ip(ctx):
+    res = await generate_response(ctx)
+    await res.title("Current IP").message(f"{get_hardware().get_ip()}").send()
+
+@tree.command(name = "visual_alert", description = "Trigger a visual alert on the hardware")
+async def visual_alert(ctx):
+    res = await generate_response(ctx)
+    get_hardware().visual_alert()
+    await res.message(f"Visual alert triggered").send()
 
 @client.event
 async def on_ready():
